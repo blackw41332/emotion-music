@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Emotion → Spotify</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --green:#1db954; --black:#191414; --card:#222; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--green), var(--black));
+      color: #fff; display: flex; flex-direction: column; align-items: center;
+    }
+    header { padding: 1rem 1.25rem; text-align: center; }
+    h1 { margin: 0.25rem 0; font-weight: 600; }
+    #status { font-size: 0.95rem; opacity: 0.9; }
+    main {
+      width: 100%; max-width: 1200px; padding: 1.5rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+    section {
+      background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 1rem;
+      backdrop-filter: blur(6px);
+    }
+    .media { position: relative; }
+    video, canvas { width: 100%; border-radius: 12px; background: #000; }
+    .emotion-box {
+      margin-top: 0.75rem; padding: 0.75rem; text-align: center;
+      background: var(--card); border-radius: 10px; font-weight: 600;
+    }
+    iframe.spotify { width: 100%; height: 380px; border: none; border-radius: 12px; margin-top: 0.5rem; }
+    .hint { font-size: 0.9rem; opacity: 0.85; margin-top: 0.25rem; }
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎵 Emotion → Spotify</h1>
+    <div id="status">Requesting camera…</div>
+  </header>
+
+  <main>
+    <section>
+      <div class="media">
+        <video id="video" autoplay muted playsinline></video>
+        <canvas id="overlay"></canvas>
+      </div>
+      <div class="emotion-box">Detected emotion: <span id="emotion">…</span></div>
+    </section>
+
+    <section>
+      <h2 style="margin:0 0 .5rem 0;">Playlist</h2>
+      <iframe id="player" class="spotify" src="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      <div class="hint">If you don’t hear sound, click Play. Browsers often block autoplay.</div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
