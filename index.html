@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Emotion to Spotify</title>
+</head>
+<body>
+  <video id="video" autoplay playsinline width="320" height="240"></video>
+  <p>Detected emotion: <span id="emotion">...</span></p>
+  <iframe id="player" width="300" height="380" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+
+<script>
+const EMOTION_TO_SPOTIFY = {
+  happy:   "https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC",
+  sad:     "https://open.spotify.com/embed/playlist/37i9dQZF1DX7qK8ma5wgG1",
+  angry:   "https://open.spotify.com/embed/playlist/37i9dQZF1DX76Wlfdnj7AP",
+  neutral: "https://open.spotify.com/embed/playlist/37i9dQZF1DX3rxVfibe1L0"
+};
+
+navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+  document.getElementById('video').srcObject = stream;
+  setInterval(captureAndSend, 5000); // every 5s
+});
+
+function captureAndSend() {
+  const video = document.getElementById('video');
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const dataUrl = canvas.toDataURL('image/jpeg');
+
+  fetch("https://yourapp.onrender.com/analyze", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ image: dataUrl })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('emotion').textContent = data.emotion;
+    document.getElementById('player').src = EMOTION_TO_SPOTIFY[data.emotion] || EMOTION_TO_SPOTIFY.neutral;
+  });
+}
+</script>
+</body>
+</html>
